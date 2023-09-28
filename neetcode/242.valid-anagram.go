@@ -23,7 +23,7 @@ func isAnagram(s string, t string) bool {
 	}
 
 	return true
-	
+	// PASSED!
 }
 // @lc code=end
 
