@@ -6,26 +6,38 @@
 
 // @lc code=start
 func productExceptSelf(nums []int) []int {
-    // prefix array
-	var prefix []int
-	// postfix array
-	var suffix []int
 
-	// calculate all the products previous to nums[i]
-	prefixProduct := 1
-	for _, val := range nums {
-		prefixProduct = prefixProduct * val
-		prefix = append(prefix,	prefixProduct)
+	if len(nums) == 1 {
+		return nums
 	}
 
-	suffixProduct := 1
-	for i := len(nums) - 1; i >= 0; i-- {
-		suffixProduct = suffixProduct * nums[i]
-		suffix = append(suffix, suffixProduct)
+	prefix := make([]int, len(nums))
+	postfix := make([]int, len(nums))
+
+	prefixMultiplier := 1
+	postfixMultiplier := 1
+	// populating prefix values
+	for key, _ := range nums {
+		prefixMultiplier *= nums[key]
+		postfixMultiplier *= nums[len(nums)-1-key]
+		prefix[key] = prefixMultiplier
+		postfix[len(nums)-1-key] = postfixMultiplier
 	}
 
-	var out []int
-	
+	out := make([]int, 0)
+
+	for key, _ := range nums {
+		if key == 0 {
+			out = append(out, postfix[key+1])
+		} else if key == len(nums)-1 {
+			out = append(out, prefix[key-1])
+		} else {
+			out = append(out, prefix[key-1]*postfix[key+1])
+		}
+	}
+
+	return out
 }
+
 // @lc code=end
 
