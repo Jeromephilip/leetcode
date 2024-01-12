@@ -4,30 +4,39 @@
  * [49] Group Anagrams
  */
 
-/* Initial idea is to create a map where the key is an array
-containing the occurences of a given character in a string and 
-the value is all the strings that match the occurence key. Another
-way to solve this is having the key as a sorted string
-*/
-
 // @lc code=start
+func sortString(s string) string {
+	r := []rune(s)
+	sort.Slice(r, func(i, j int) bool {
+		return r[i] < r[j]
+	})
+
+	return string(r)
+}
+
+
 func groupAnagrams(strs []string) [][]string {
-	m := make(map[[26]int][]string)
+    // create a map where sorted_word -> [...words]
+	strMap := map[string][]string{}
+
 	for _, val := range strs {
-		var ocrs [26]int
-		for _, s := range val {
-			ocrs[int(s) - 97]++
+		sorted := sortString(val)
+		if _, exists := strMap[sorted]; exists {
+			strMap[sorted] = append(strMap[sorted], val)
+		} else {
+			anagrams := []string{val}
+			strMap[sorted] = anagrams
 		}
-
-		// add to map
-		m[ocrs] = append(m[ocrs], val)
 	}
 
-	var out [][]string
-	for _, value := range m {
-		out = append(out, value)
-	}
+	out := [][]string{}
 
+	// loop again and return the arrays
+
+	for _, val := range strMap {
+		out = append(out, val)
+	}
+	
 	return out
 }
 // @lc code=end
